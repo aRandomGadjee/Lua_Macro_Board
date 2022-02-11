@@ -1,5 +1,33 @@
 clear()
-local keyboardIdentifier = '' --you'll need to set this :)
+local keyboardIdentifier = '0000AAA' --you'll need to set this, or leave this as '0000AAA' :)
+
+-- local functions
+local function write_devices_to_file(filename)
+	local file = io.open(filename, 'w') -- if 
+	deviceTable = lmc_get_devices()
+	file:write('Connected Devices:'..'\n')
+	for key,value in pairs(deviceTable) do 
+		file:write(key..':')
+		for key2,value2 in pairs(value) do
+			file:write('  '..key2..' = '..value2..'\n') 
+		end
+	end
+	file:close()
+end
+
+local function display_devices()
+	devices = lmc_get_devices()
+	print('##   You must set the keyboardIdentifier variable with one of the below SystemID;')
+	print('##   The string between the two "&" ampersands in your SystemID is the keyboardIdentifier - find the desired device in the below list, copy the value and enter it in the keyboardIdentifier string at the top of the file.')
+	print('##   Once done, save and re-run the LUA script. This will minimize to the tray and run silent. You will have to reset this every time you disconnect your keyboard.')
+	for key,value in pairs(devices) do 
+		print(key..':')
+		for key2,value2 in pairs(value) do 
+			print('  '..key2..' = '..value2) 
+		end
+	end
+end
+--
 
 if string.len(keyboardIdentifier) > 1 then
 	if keyboardIdentifier == '0000AAA' then
@@ -60,18 +88,13 @@ if string.len(keyboardIdentifier) > 1 then
 		end
 		if (direction == 0) then return
 		else lmc_send_input(config[button],0,0) end -- Send the mapped input.
-	end)
-	lmc_minimize() -- once the keyboard is set, hide in your 
-else
-	devices = lmc_get_devices()
-	print('##   You must set the keyboardIdentifier variable with one of the below SystemID;')
-	print('##   The string between the two "&" ampersands in your SystemID is the keyboardIdentifier - find the desired device in the below list, copy the value and enter it in the keyboardIdentifier string at the top of the file.')
-	print('##   Once done, save and re-run the LUA script. This will minimize to the tray and run silent. You will have to reset this every time you disconnect your keyboard.')
-	for key,value in pairs(devices) do 
-		print(key..':')
-		for key2,value2 in pairs(value) do 
-			print('  '..key2..' = '..value2) 
-		end
 	end
+)
+
+write_devices_to_file('MacroKeyboard_Devices.txt')
+
+lmc_minimize() -- once the keyboard is set, hide in your hidden icons
+else
+display_devices()
 end
 lmc.autoReload = true
