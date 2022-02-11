@@ -3,7 +3,7 @@ local keyboardIdentifier = '0000AAA' --you'll need to set this, or leave this as
 
 -- local functions
 local function write_devices_to_file(filename)
-	local file = io.open(filename, 'w') -- if 
+	local file = io.open(filename, 'w') -- if no gile exisits with this name, create it, else overwrite.... TODO: check for errors where file exisits but cannot be opened / edited...
 	deviceTable = lmc_get_devices()
 	file:write('Connected Devices:'..'\n')
 	for key,value in pairs(deviceTable) do 
@@ -93,7 +93,7 @@ if string.len(keyboardIdentifier) > 1 then
 
 write_devices_to_file('MacroKeyboard_Devices.txt')
 
-lmc_minimize() -- once the keyboard is set, hide in your hidden icons
+lmc_minimize() -- once the keyboard is set, hide this window.
 else
 display_devices()
 end
